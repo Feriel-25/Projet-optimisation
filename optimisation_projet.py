@@ -20,12 +20,12 @@ def F1(L1,L2,th1,th2,X):
 
 
 def R(TH):
-    return np.array([L1*np.cos(TH[0])+L2*np.cos(TH[0]+TH[1]),L1*np.sin(TH[0])+L2*np.sin(TH[0]+TH[1])])-X
+    return np.array([L1*np.cos(TH[0])+L2*np.cos(TH[0]+TH[1])-X[0],L1*np.sin(TH[0])+L2*np.sin(TH[0]+TH[1])]-X[1])
 
 
 
 def R_norm(TH):
-    return np.power(np.linalg.norm(np.array(R(TH))),2)
+    return (L1*np.cos(TH[0])+L2*np.cos(TH[0]+TH[1])-X[0])**2 + (L1*np.sin(TH[0])+L2*np.sin(TH[0]+TH[1])-X[1])**2
 
 def Rn2(th1,th2,L1,L2,X):
     return np.power(np.linalg.norm(F1(L1,L2,th1,th2,X)),2)
@@ -152,7 +152,7 @@ resultat = GradienDecent(TH00,alpha,L1,L2,10e-4,100)
 print("methode du gradient")
 print(f"les angles optimaux : { resultat}")
 print(f"Position de l'organe terminale du robot avec les angles optimaux: {F(L1,L2,resultat[0],resultat[1])}")
-"""
+
 # Définition du domaine de tracé
 xmin, xmax, nx = -np.pi, np.pi, 100
 ymin, ymax, ny = -np.pi, np.pi, 100
@@ -162,18 +162,21 @@ y1d = np.linspace(ymin,ymax,ny)
 x2d, y2d = np.meshgrid(x1d, y1d)
 print(np.shape(x2d),np.shape(y2d))
 # Tracé des isovaleurs de f1
-nIso = 50
+nIso = 100
 #Tracé des isovaleur pour une seule iteration 
 plt.figure("fig")
-res = []
 
-for i in x1d:
-    for j in y1d:
-        res.append(R_norm(np.array([i,j])))
-print(res)        
-
-plt.contour(x2d,y2d,res,nIso)
+plt.contour(x2d,y2d,R_norm([x2d,y2d]),nIso)
 plt.title('Isovaleurs')
 plt.xlabel('Valeurs de x1')
 plt.ylabel('Valeurs de x2')
-plt.grid()"""
+plt.grid()
+
+
+#plotting
+plt.figure()
+x1, y1 = [0, L1*np.cos(np.pi/4)], [0, L1*np.sin(np.pi/4)]
+x2, y2 = [L1*np.cos(np.pi/4),L1*np.cos(np.pi/4)+L2*np.cos(np.pi/2) ], [L1*np.sin(np.pi/4),L1*np.sin(np.pi/4)+ L2*np.sin(np.pi/2)]
+plt.plot(x1, y1,x2,y2 ,marker = 'o',color='m',linewidth=10)
+plt.scatter(x1[1],y1[1], s=100,marker='o',color='m',linewidths=20)
+plt.show()
