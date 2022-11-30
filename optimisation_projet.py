@@ -118,6 +118,20 @@ print(f"Le nombre d'iterations pour cette methode est : {n} iterations")
 
 print(F(L1,L2, th1n_1,th2n_1))
 
+#plotting
+
+def animate (TH,fig):  
+    
+    L1=3
+    L2=3
+    x1, y1 = [0, L1*np.cos(TH[0])], [0, L1*np.sin(TH[0])]
+    x2, y2 = [L1*np.cos(TH[0]),L1*np.cos(TH[0])+L2*np.cos(TH[0]+TH[1])], [L1*np.sin(TH[0]),L1*np.sin(TH[0])+ L2*np.sin(TH[0]+TH[1])]
+ 
+    
+    plt.plot(x1, y1,x2,y2 ,marker = 'o',color='b',linewidth=10)
+    plt.scatter(x1[1],y1[1], s=100,marker='o',color='k',linewidths=20)
+    plt.scatter(x2[1],y2[1], s=100,marker='o',color='k',linewidths=20)
+    plt.show()
 
 
 #Gradient a pas Fixe
@@ -129,13 +143,13 @@ def Grad_Re(th1,th2,L1,L2,X):
     dth1 = 2*x*(L1*np.sin(th1)+L2*np.sin(th1+th2))-2*y*(L1*np.cos(th1)+L2*np.cos(th1+th2))
     dth2 = -2*L1*L2*np.sin(th2)+2*x*L2*np.sin(th1+th2)-2*y*L2*np.sin(th1+th2)
     return np.array([dth1,dth2])
-def GradienDecent (TH0,alpha,L1,L2,eps,n_max):
+def GradienDecent (TH0,alpha,L1,L2,eps,n_max,x):
     Un = 1
     divide = False
     thn = TH0 
     n=0
     while(np.linalg.norm(Un)>eps and n<n_max ) :
-        thn_1 =  thn - alpha * Grad_Re(thn[0],thn[1],L1,L2,X)
+        thn_1 =  thn - alpha * Grad_Re(thn[0],thn[1],L1,L2,x)
         if (R_norm(thn)<R_norm(thn_1)) and not divide  : 
             alpha = aplha_init / 2 
             divide = True
@@ -145,10 +159,11 @@ def GradienDecent (TH0,alpha,L1,L2,eps,n_max):
         Un = thn_1 - thn 
         thn = thn_1
         n=n+1
-        print(alpha)
     return thn
 TH00 = np.array([0,0])
-resultat = GradienDecent(TH00,alpha,L1,L2,10e-4,100) 
+plt.figure(figsize=(6,6))
+resultat = GradienDecent(TH00,alpha,L1,L2,10e-4,100,X) 
+
 print("methode du gradient")
 print(f"les angles optimaux : { resultat}")
 print(f"Position de l'organe terminale du robot avec les angles optimaux: {F(L1,L2,resultat[0],resultat[1])}")
@@ -172,11 +187,15 @@ plt.xlabel('Valeurs de x1')
 plt.ylabel('Valeurs de x2')
 plt.grid()
 
+Xi=[5,1]
+Xf=[1,3]
+N=50
+x,y=Interp(Xi,Xf,N)
 
-#plotting
-plt.figure()
-x1, y1 = [0, L1*np.cos(np.pi/4)], [0, L1*np.sin(np.pi/4)]
-x2, y2 = [L1*np.cos(np.pi/4),L1*np.cos(np.pi/4)+L2*np.cos(np.pi/2) ], [L1*np.sin(np.pi/4),L1*np.sin(np.pi/4)+ L2*np.sin(np.pi/2)]
-plt.plot(x1, y1,x2,y2 ,marker = 'o',color='m',linewidth=10)
-plt.scatter(x1[1],y1[1], s=100,marker='o',color='m',linewidths=20)
-plt.show()
+plt.plot(x,y,'r', label = 'droite')
+for i in  range(N): 
+    X=[x[i],y[i]]
+    #angles=GradienDecent(TH00,alpha,L1,L2,10e-4,100,[x[i],y[i]]) 
+    rt=optimize.root(R, [np.pi/4,np.pi/4], jac=False)
+    print(rt.x)
+    animate(rt.x,plt.figure())
