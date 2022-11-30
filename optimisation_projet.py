@@ -121,10 +121,8 @@ print(F(L1,L2, th1n_1,th2n_1))
 #plotting
 
 def animate (TH): 
-    plt.xlim([-2, 2])
-    plt.ylim([-2,2])
-    L1=0.5
-    L2=0.5
+    plt.xlim([-2,8])
+    plt.ylim([-2,8])
     x1, y1 = [0, L1*np.cos(TH[0])], [0, L1*np.sin(TH[0])]
     x2, y2 = [L1*np.cos(TH[0]),L1*np.cos(TH[0])+L2*np.cos(TH[0]+TH[1])], [L1*np.sin(TH[0]),L1*np.sin(TH[0])+ L2*np.sin(TH[0]+TH[1])]
  
@@ -185,9 +183,9 @@ plt.title('Isovaleurs')
 plt.xlabel('Valeurs de x1')
 plt.ylabel('Valeurs de x2')
 plt.grid()
-"""
-Xf=[0,0.5]
-Xi=[0.5,0.5]
+
+Xf=[2,5]
+Xi=[6,0]
 N=50
 x,y=Interp(Xi,Xf,N)
 """
@@ -202,4 +200,4 @@ for i in  range(N):
     animate(rt.x)
     plt.plot(x,y,'r', label = 'droite')
     #plt.scatter(x[i],y[i], s=100,marker='x',color='r',linewidths=20)
-    """
+    
