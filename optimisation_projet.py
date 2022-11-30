@@ -120,8 +120,9 @@ print(F(L1,L2, th1n_1,th2n_1))
 
 #plotting
 
-def animate (TH,fig):  
-    
+def animate (TH): 
+    plt.xlim([-2, 10])
+    plt.ylim([-2,10])
     L1=3
     L2=3
     x1, y1 = [0, L1*np.cos(TH[0])], [0, L1*np.sin(TH[0])]
@@ -187,15 +188,19 @@ plt.xlabel('Valeurs de x1')
 plt.ylabel('Valeurs de x2')
 plt.grid()
 
-Xi=[5,1]
-Xf=[1,3]
+Xf=[2,2]
+Xi=[0,6]
 N=50
 x,y=Interp(Xi,Xf,N)
 
-plt.plot(x,y,'r', label = 'droite')
+
+fig = plt.figure()
+
 for i in  range(N): 
     X=[x[i],y[i]]
     #angles=GradienDecent(TH00,alpha,L1,L2,10e-4,100,[x[i],y[i]]) 
-    rt=optimize.root(R, [np.pi/4,np.pi/4], jac=False)
+    rt=optimize.root(R, [np.pi/2,0], jac=False)
     print(rt.x)
-    animate(rt.x,plt.figure())
+    animate(rt.x)
+    plt.plot(x,y,'r', label = 'droite')
+    #plt.scatter(x[i],y[i], s=100,marker='x',color='r',linewidths=20)
