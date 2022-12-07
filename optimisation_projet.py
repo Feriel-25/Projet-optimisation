@@ -15,8 +15,7 @@ X=np.array([2,1])
 def F(L1,L2,th1,th2):
     return np.array([L1*np.cos(th1)+L2*np.cos(th1+th2),L1*np.sin(th1)+L2*np.sin(th1+th2)])
 
-def F1(L1,L2,th1,th2,X):
-    return np.array([L1*np.cos(th1)+L2*np.cos(th1+th2),L1*np.sin(th1)+L2*np.sin(th1+th2)])-X
+
 
 
 def R(TH):
@@ -27,8 +26,7 @@ def R(TH):
 def R_norm(TH):
     return (L1*np.cos(TH[0])+L2*np.cos(TH[0]+TH[1])-X[0])**2 + (L1*np.sin(TH[0])+L2*np.sin(TH[0]+TH[1])-X[1])**2
 
-def Rn2(th1,th2,L1,L2,X):
-    return np.power(np.linalg.norm(F1(L1,L2,th1,th2,X)),2)
+
    
     
     
@@ -57,68 +55,15 @@ else:
  # Methode 2 Minimize
 
 min_R_norm=optimize.minimize(R_norm,[np.pi/4,np.pi/4])
-#print(min_R_norm.success)
+
 print("Methode Minimize : ")
 print(f"les angles optimaux ={min_R_norm.x} \nLe point (X,Y) ={F(L1,L2,min_R_norm.x[0],min_R_norm.x[1])}")
 
 
-#fig=plt.figure()
-#plt.plot(Interp(Xi=[0.2,0],Xf=[0,0.2],N=100)[0], Interp(Xi=[0.2,0],Xf=[0,0.2],N=100)[1],'r', label = 'droite')
-
-
-#x,y= Interp(Xi=[0,0.2],Xf=[0.2,0],N=100,traj="Cube",Xm=[0.05,0.1])
-#plt.plot(x,y,'r', label = 'droite')
 
 
 init_config=[np.pi/4,np.pi/4]
-"""for i in range(len(x)):
-    X=np.array([x[i],y[i]])
-    min_R_norm=optimize.minimize(Rn,init_config)
-    init_config=min_R_norm.x
-    #print(min_R_norm.x[0],min_R_norm.x[1])
-    res=F(L1,L2,min_R_norm.x[0],min_R_norm.x[1])
-    print(res)
-    #fig.plot(res[0], res[1],'k')
-    plt.scatter(res[0], res[1],color="black")
-    
-    #plt.plot(res[0], res[1],'k')
-"""    
 
-# Gradient Pas optimal
-
-"""
-def Grad_Re(th1,th2,L1,L2,X):
-    x = X[0]
-    y = X[1]
-    dth1 = 2*x*(L1*np.sin(th1)+L2*np.sin(th1+th2))-2*y*(L1*np.cos(th1)+L2*np.cos(th1+th2))
-    dth2 = -2*L1*L2*np.sin(th2)+2*x*L2*np.sin(th1+th2)-2*y*L2*np.sin(th1+th2)
-    return np.array([dth1,dth2])
-"""
-"""
-th1n = 0
-th2n = 0
-n = 1
-def Sys_Eqt0(x):
-    return [
-        Rn2((th1n-x[0]*Grad_Re(th1n,th2n,L1,L2,X)[0]),(th2n-x[0]*Grad_Re(th1n,th2n,L1,L2,X)[1]),L1,L2,X)
-           ]
-while (True) :
-    res = optimize.root(Sys_Eqt0,[0.1], jac=False) 
-    alpha = res.x[0]
-    th1n_1 = th1n - alpha*Grad_Re(th1n,th2n,L1,L2,X)[0]
-    th2n_1 = th2n - alpha*Grad_Re(th1n,th2n,L1,L2,X)[1]
-    if (Rn2(th1n_1,th2n_1,L1,L2,X)>Rn2(th1n,th2n,L1,L2,X)):
-        print("Minimum trouve")
-        break
-    th1n,x2n = th1n_1,th2n_1
-    if(n>10000) :  break 
-    n+= 1 
-print( th1n_1,th2n_1)
-print(f"Le nombre d'iterations pour cette methode est : {n} iterations")    
-
-print(F(L1,L2, th1n_1,th2n_1))
-"""
-#plotting
 
 def animate (TH): 
     plt.xlim([-2,8])
@@ -131,31 +76,65 @@ def animate (TH):
     plt.scatter(x1[1],y1[1], s=100,marker='o',color='k',linewidths=20)
     plt.scatter(x2[1],y2[1], s=100,marker='o',color='k',linewidths=20)
     plt.show()
-
-
-#Gradient a pas Fixe
-aplha_init = 0.05
-
 def Grad_Re(th1,th2,L1,L2,X):
     x = X[0]
     y = X[1]
     dth1 = 2*x*(L1*np.sin(th1)+L2*np.sin(th1+th2))-2*y*(L1*np.cos(th1)+L2*np.cos(th1+th2))
     dth2 = -2*L1*L2*np.sin(th2)+2*x*L2*np.sin(th1+th2)-2*y*L2*np.cos(th1+th2)
     return np.array([dth1,dth2])
+
+
+def Hess_Re(th1,th2,L1,L2,X):
+    x = X[0]
+    y = X[1]
+    dth11=   2*x*(L1*np.cos(th1)+L2*np.cos(th1+th2))+2*y*(L1*np.sin(th1)+L2*np.sin(th1+th2))
+    dth12 =  2*x*L2*np.cos(th1+th2)+2*y*L2*np.sin(th1+th2)
+    dth21=   2*x*L2*np.cos(th1+th2)+2*y*L2*np.sin(th1+th2)
+    dth22 = -2*L1*L2*np.cos(th2)+2*x*L2*np.cos(th1+th2)+2*y*L2*np.sin(th1+th2)
+    return np.array([[dth11,dth12],[dth21,dth22]])
+
+
+
+def isoValeurs (nx,ny, nIso,thn=[None,None],thn_1=[None,None]) : 
+    # Définition du domaine de tracé
+    xmin, xmax, nx = -np.pi, np.pi, 100
+    ymin, ymax, ny = -np.pi, np.pi, 100
+    # Discrétisation du domaine de tracé
+    x1d = np.linspace(xmin,xmax,nx)
+    y1d = np.linspace(ymin,ymax,ny)
+    x2d, y2d = np.meshgrid(x1d, y1d)
+  
+    #Tracé des isovaleur pour une seule iteration 
+    plt.figure()
+    
+    plt.contour(x2d,y2d,R_norm([x2d,y2d]),nIso)
+    if (all(thn)!=None and all(thn_1)!=None) : 
+        plt.scatter(thn[0],thn[1],color='black')
+        plt.plot([thn[0], thn_1[0]],[thn[1], thn_1[1]],"--r")
+    plt.title('Isovaleurs')
+    plt.xlabel('Valeurs de x1')
+    plt.ylabel('Valeurs de x2')
+    plt.grid()
+    
+    
+#Gradient a pas Fixe
+aplha_init = 0.05
+
 def GradienDecent (TH0,alpha,L1,L2,eps,n_max,x):
     Un = 1
-    #divide = False
+    divide = False
     thn = TH0 
     n=0
     while(np.linalg.norm(Un)>eps and n<n_max ) :
         thn_1 =  thn - alpha * Grad_Re(thn[0],thn[1],L1,L2,x)
-       # if (R_norm(thn)<R_norm(thn_1)) and not divide  : 
-        #    alpha = aplha_init / 2 
-         #   divide = True
-        #elif(R_norm(thn)>R_norm(thn_1) and divide):
-         #   alpha = aplha_init
-          #  divide = False
+        if (R_norm(thn)<R_norm(thn_1)) and not divide  : 
+            alpha = aplha_init / 2 
+            divide = True
+        elif(R_norm(thn)>R_norm(thn_1) and divide):
+            alpha = aplha_init
+            divide = False
         Un = thn_1 - thn 
+        #isoValeurs (100,100,25,thn,thn_1)
         thn = thn_1
         n=n+1
     return thn
@@ -165,39 +144,66 @@ print("Methode du gradient a pas fixe : ")
 print(f"les angles optimaux = {resultat} \nLe point (X,Y) = {F(L1,L2,resultat[0],resultat[1])}")
 
 
-# Définition du domaine de tracé
-xmin, xmax, nx = -np.pi, np.pi, 100
-ymin, ymax, ny = -np.pi, np.pi, 100
-# Discrétisation du domaine de tracé
-x1d = np.linspace(xmin,xmax,nx)
-y1d = np.linspace(ymin,ymax,ny)
-x2d, y2d = np.meshgrid(x1d, y1d)
-# Tracé des isovaleurs de f1
-nIso = 100
-#Tracé des isovaleur pour une seule iteration 
-plt.figure("fig")
+grad = None 
+Hes = None
 
-plt.contour(x2d,y2d,R_norm([x2d,y2d]),nIso)
-plt.scatter(resultat[0],resultat[1], s=100,marker='x',color='r')
-plt.title('Isovaleurs')
-plt.xlabel('Valeurs de x1')
-plt.ylabel('Valeurs de x2')
-plt.grid()
+def Newton_eq(delta_theta):
+    return [Hes[0][0]*delta_theta[0]+Hes[0][1]*delta_theta[1]+grad[0],Hes[1][0]*delta_theta[0]+Hes[1][1]*delta_theta[1]+grad[1]]
 
-Xf=[2,5]
-Xi=[6,0]
+def Newton(eps,TH,X,nmax):
+    global Hes 
+    global grad
+    mod=1
+    th1n=TH[0]
+    th2n=TH[1]
+    n=0
+    q = [np.pi/4,np.pi/4]
+    while mod>eps and n<nmax  :
+        grad=Grad_Re(th1n,th2n,L1,L2,X)
+        Hes=Hess_Re(th1n,th2n,L1,L2,X)
+        sol = optimize.root(Newton_eq,q, jac=False)
+        dt=sol.x
+        q = dt
+        th1n+=dt[0]
+        th2n+=dt[1]
+        mod=np.linalg.norm(dt)
+        n+=1
+    if n<nmax : success = True
+    else : success = False
+    return np.array([th1n,th2n])
+
+TH=np.array([0.75,0.75])
+
+X=np.array([4,2.2])
+#rv = Newton(0.1,TH,X,1000)
+print(X)
+rv = GradienDecent(TH,aplha_init,L1,L2,10e-4,100,X) 
+print(rv)
+print(F(L1,L2,rv[0],rv[1]))
+
+#animate(rv)
+#isoValeurs (100,100,25)
+#plt.scatter(rv[0],rv[1],color='black')
+
+Xf=[2,4]
+Xi=[2,6]
 N=50
 x,y=Interp(Xi,Xf,N)
-"""
-"""
-fig = plt.figure()
+X=[x[0],y[0]]
+isoValeurs (100,100,100)
+q = [-0.5,1]
 
+fig = plt.figure()
+#q = [1.5,0]
+qg = [1.5,0]
 for i in  range(N): 
     X=[x[i],y[i]]
-    #angles=GradienDecent(TH00,alpha,L1,L2,10e-4,100,[x[i],y[i]]) 
-    rt=optimize.root(R, [np.pi/2,0], jac=False)
-    print(rt.x)
-    animate(rt.x)
+    #♠angles=Newton(0.001,q,X,1000)
+    rt=optimize.root(R, q, jac=False)
     plt.plot(x,y,'r', label = 'droite')
-    #plt.scatter(x[i],y[i], s=100,marker='x',color='r',linewidths=20)
+    animate(rt.x)
+    q = rt.x
+    #print(F(L1,L2,angles[0],angles[1]))
+    
+    
     
