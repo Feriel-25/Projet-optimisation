@@ -1,26 +1,31 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 21 08:59:21 2022
-@author: feriel
+Created on Sat Dec 10 23:54:31 2022
+
+@author: khale
 """
 import numpy as np
 from scipy import optimize 
-from scipy.interpolate import CubicSpline as CS
-import matplotlib.pyplot as plt
-from optimisation_projet import Grad_Re ,  Hess_Re , F
+from Functions import Newton_eq 
 
-print('Hana f newton')
+def Newton(TH0,Params,eps,nmax):
+    global grad 
+    global Hes
+    mod=1
+    th1n=TH0[0]
+    th2n=TH0[1]
+    n=0
+    q = [np.pi/4,np.pi/4]
+    while mod>eps and n<nmax  :
+        Arg =  [Params , th1n , th2n]
+        sol = optimize.root(Newton_eq,q,args=Arg, jac=False)
+        dt=sol.x
+        q = dt
+        th1n+=dt[0]
+        th2n+=dt[1]
+        mod=np.linalg.norm(dt)
+        n+=1
+    if n<nmax : success = True
+    else : success = False
+    return np.array([th1n,th2n]) , success 
 
-th1n = -0.5
-th2n = 2
-TH=np.array([th1n,th2n])
-n = 1
-L1=3
-L2=3
-
-
-X=np.array([2,1])
-
-
-
-print(Newton(0.1,TH,X,1000))
