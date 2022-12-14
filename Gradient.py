@@ -29,4 +29,6 @@ def GradienDecent (TH0,alpha,Params,eps,n_max):
         isoValeurs (Params,100,100,25,thn,thn_1) 
         thn = thn_1
         n=n+1
-    return thn
+    if (n<n_max) : converge = True
+    else : converge = False
+    return thn , converge

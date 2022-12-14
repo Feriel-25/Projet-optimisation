@@ -41,8 +41,8 @@ def animate (TH,Params):
 
 def isoValeurs (Params,nx,ny, nIso,thn=[None,None],thn_1=[None,None]) : 
     # Définition du domaine de tracé
-    xmin, xmax, nx = -np.pi, np.pi, 100
-    ymin, ymax, ny = -np.pi, np.pi, 100
+    xmin, xmax, nx = -np.pi, np.pi, nx
+    ymin, ymax, ny = -np.pi, np.pi, ny
     # Discrétisation du domaine de tracé
     x1d = np.linspace(xmin,xmax,nx)
     y1d = np.linspace(ymin,ymax,ny)
