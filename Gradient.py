@@ -26,7 +26,7 @@ def GradienDecent (TH0,alpha,Params,eps,n_max):
             alpha = aplha_init
             divide = False
         Un = thn_1 - thn 
-        #isoValeurs (Params,100,100,25,thn,thn_1) 
+        isoValeurs (Params,100,100,25,thn,thn_1) 
         thn = thn_1
         n=n+1
     return thn
