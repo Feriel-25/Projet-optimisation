@@ -53,7 +53,7 @@ def isoValeurs (Params,nx,ny, nIso,thn=[None,None],thn_1=[None,None]) :
         plt.scatter(thn[0],thn[1],color='black')
         plt.plot([thn[0], thn_1[0]],[thn[1], thn_1[1]],"--r")
     plt.title('Isovaleurs')
-    plt.xlabel('Valeurs de x1')
-    plt.ylabel('Valeurs de x2')
+    plt.xlabel('Valeurs de theta1')
+    plt.ylabel('Valeurs de theta2')
     plt.grid()
     
