@@ -16,9 +16,6 @@ L2=3
 X=np.array([2,1])
 Params = [L1,L2,X]
 init_config=[np.pi/4,np.pi/4]
-   
- 
-    
 
  # Methode 1 : Root
 print("Methode Root : ")

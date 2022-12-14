@@ -9,8 +9,6 @@ from scipy import optimize
 from Functions import Newton_eq 
 
 def Newton(TH0,Params,eps,nmax):
-    global grad 
-    global Hes
     mod=1
     th1n=TH0[0]
     th2n=TH0[1]

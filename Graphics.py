@@ -27,15 +27,14 @@ def Interp(Xi,Xf,N,traj=None,Xm=None):
 def animate (TH,Params):
     L1 = Params[0]
     L2 = Params[1]
-    plt.xlim([-2,8])
-    plt.ylim([-2,8])
+    plt.xlim([-4,8])
+    plt.ylim([-4,8])
     x1, y1 = [0, L1*np.cos(TH[0])], [0, L1*np.sin(TH[0])]
     x2, y2 = [L1*np.cos(TH[0]),L1*np.cos(TH[0])+L2*np.cos(TH[0]+TH[1])], [L1*np.sin(TH[0]),L1*np.sin(TH[0])+ L2*np.sin(TH[0]+TH[1])]
     plt.plot(x1, y1,x2,y2 ,marker = 'o',color='b',linewidth=10)
     plt.scatter(x1[1],y1[1], s=100,marker='o',color='k',linewidths=20)
     plt.scatter(x2[1],y2[1], s=100,marker='o',color='k',linewidths=20)
-    plt.grid()
-    plt.show()
+    
     
 
 
@@ -48,9 +47,7 @@ def isoValeurs (Params,nx,ny, nIso,thn=[None,None],thn_1=[None,None]) :
     y1d = np.linspace(ymin,ymax,ny)
     x2d, y2d = np.meshgrid(x1d, y1d)
   
-    #Tracé des isovaleur pour une seule iteration 
-    
-    
+    #Tracé des isovaleur 
     plt.contour(x2d,y2d,R_norm([x2d,y2d],Params),nIso)
     if (all(thn)!=None and all(thn_1)!=None) : 
         plt.scatter(thn[0],thn[1],color='black')
