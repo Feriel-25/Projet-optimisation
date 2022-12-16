@@ -10,6 +10,24 @@ import matplotlib.pyplot as plt
 from Functions import R_norm
     
 def Interp(Xi,Xf,N,traj=None,Xm=None):
+    """
+    
+
+    Parameters
+    ----------
+    Xi : Point initialle 
+    Xf : Point finale 
+    N : Nombre de points
+    traj : Defini si la trajectoire est libaire ou cubique
+        Valeur par default c'est None dont trajectoire lineaire.
+    Xm : Point Intermediaire
+        Valeur par default c'est None dont trajectoire lineaire.
+
+    Returns
+    -------
+    Vecteur de points X et Y
+
+    """
     
     x=np.linspace(Xi[0],Xf[0],N)
     if traj==None:
@@ -25,6 +43,19 @@ def Interp(Xi,Xf,N,traj=None,Xm=None):
 
 
 def animate (TH,Params):
+    """
+    
+
+    Parameters
+    ----------
+    TH : Les angles articulaire du robot TH = [theta1,theta2]
+    Params : Vecteur contenant L1,L2 et un vecteur numPy X du point desiré
+
+    Returns
+    -------
+    None.
+
+    """
     L1 = Params[0]
     L2 = Params[1]
     plt.xlim([-4,8])
@@ -39,6 +70,26 @@ def animate (TH,Params):
 
 
 def isoValeurs (Params,nx,ny, nIso,thn=[None,None],thn_1=[None,None]) : 
+    """
+
+    Parameters
+    ----------
+    Params : Vecteur contenant L1,L2 et un vecteur numPy X
+    nx : Nombre de points en x
+        
+    ny :   Nombre de points en y.
+    nIso :Nombre d'Isovaleurs a dessiner
+    
+    thn : Vecteur contenant les angles articulaires a l'instant  n , optional
+       Valeur par default c'est [None,None].
+    thn_1 : Vecteur contenant les angles articulaires a l'instant  n+1 , optional
+       Valeur par default c'est [None,None].
+
+    Returns
+    -------
+    None.
+
+    """
     # Définition du domaine de tracé
     xmin, xmax, nx = -np.pi, np.pi, nx
     ymin, ymax, ny = -np.pi, np.pi, ny
@@ -49,6 +100,7 @@ def isoValeurs (Params,nx,ny, nIso,thn=[None,None],thn_1=[None,None]) :
   
     #Tracé des isovaleur 
     plt.contour(x2d,y2d,R_norm([x2d,y2d],Params),nIso)
+    # Si thn et thn_1 sont pas egale a [None,None] on trace les isovaleurs et les angles (les points)
     if (all(thn)!=None and all(thn_1)!=None) : 
         plt.scatter(thn[0],thn[1],color='black')
         plt.plot([thn[0], thn_1[0]],[thn[1], thn_1[1]],"--r")
