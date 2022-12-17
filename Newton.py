@@ -9,6 +9,27 @@ from scipy import optimize
 from Functions import Newton_eq 
 
 def Newton(TH0,Params,eps,nmax):
+    """
+    
+
+    Parameters
+    ----------
+    TH0 : Configuration Initialle
+    
+    Params :  Vecteur contenant L1,L2 et un vecteur numPy X du point desiré
+    
+    eps : La precision 
+    
+    nmax : Nombre d'iteration Maximale
+
+
+    Returns
+    -------
+    [th1n,th2n] : Vecteur numpy de la  Solution a la fin du calcul
+    success : True : L'algorithme a converger vers la solution
+           False : L'algorithme a depasser le nombre d'iteration avant max avant de converger vers la solution
+
+    """
     mod=1
     th1n=TH0[0]
     th2n=TH0[1]
@@ -16,11 +37,14 @@ def Newton(TH0,Params,eps,nmax):
     q = [np.pi/4,np.pi/4]
     while mod>eps and n<nmax  :
         Arg =  [Params , th1n , th2n]
+        # Resolution du systeme matricielle HRnorm(thn)dth+gradRnorm(thn) = 0
         sol = optimize.root(Newton_eq,q,args=Arg, jac=False)
         dt=sol.x
+        #Mise a jour de l'estimation initiale
         q = dt
         th1n+=dt[0]
         th2n+=dt[1]
+        # Calcule du module de dt
         mod=np.linalg.norm(dt)
         n+=1
     if n<nmax : success = True

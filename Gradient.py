@@ -11,6 +11,30 @@ from Graphics import isoValeurs
 
 
 def GradienDecent (TH0,alpha,Params,eps,n_max,IsoV=False, Disp = False):
+    """
+    
+
+    Parameters
+    ----------
+    TH0 : Configuration Initialle
+    alpha : Le pas du gradient 
+    Params : Vecteur contenant L1,L2 et un vecteur numPy X du point desiré
+    eps : La precision 
+    n_max : Nombre d'iteration Maximale
+    IsoV (Optionnel): True : Trace les Isovaleurs a la fin de l'algorithme
+           False : Ne Trace rien.
+        default: False.
+    Disp (Optionnel):   True : Affiche les differents information a travers les calculs
+           False : N'affiche rien.
+        default: False.
+
+    Returns
+    -------
+    thn : Solution a la fin du calcul
+    converge :  True : L'algorithme a converger vers la solution
+           False : L'algorithme a depasser le nombre d'iteration avant max avant de converger vers la solution
+
+    """
     Un = 1
     thn = TH0 
     n=0
@@ -36,6 +60,31 @@ def GradienDecent (TH0,alpha,Params,eps,n_max,IsoV=False, Disp = False):
     return thn , converge
 
 def GradienDecentAmeliore (TH0,alpha,Params,eps,n_max,IsoV=False, Disp = False):
+    """
+    Cette algorithm de gradient decend Divise la valeurs du pas sur deux si la fonction minimisé ne 
+    decroit pas entre le point n et n+1
+
+    Parameters
+    ----------
+    TH0 : Configuration Initialle
+    alpha : Le pas du gradient 
+    Params : Vecteur contenant L1,L2 et un vecteur numPy X du point desiré
+    eps : Le precision 
+    n_max : Nombre d'iteration Maximale'
+    IsoV (Optionnel): True : Trace les Isovaleurs a la fin de l'algorithme
+           False : Ne Trace rien.
+        default: False.
+    Disp (Optionnel):   True : Affiche les differents information a travers les calculs
+           False : N'affiche rien.
+        default: False.
+
+    Returns
+    -------
+    thn : Solution a la fin du calcul
+    converge :  True : L'algorithme a converger vers la solution
+           False : L'algorithme a depasser le nombre d'iteration avant max avant de converger vers la solution
+
+    """
     Un = 1
     divide = False
     thn = TH0 
