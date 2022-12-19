@@ -70,6 +70,5 @@ def Newton(TH0,Params,eps,nmax,IsoV=False,Disp=False):
         #plt.show()
     return np.array([th1n,th2n]) , success 
 
-#Params = [3,3,[3,0]]
-#zawaya,success=Newton([np.pi/4,np.pi/4],Params,0.0000001,100,Disp=True,IsoV=True)
+
 
