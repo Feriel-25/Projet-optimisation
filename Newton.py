@@ -7,7 +7,8 @@ Created on Sat Dec 10 23:54:31 2022
 import numpy as np
 from scipy import optimize 
 from Functions import Newton_eq,F
-from Graphics import *
+from Graphics import isoValeurs
+import matplotlib.pyplot as plt
 
 def Newton(TH0,Params,eps,nmax,IsoV=False,Disp=False):
     """
